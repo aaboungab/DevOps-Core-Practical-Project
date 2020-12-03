@@ -10,9 +10,6 @@ pipeline{
                 steps{
                     sh "./scripts/ansible.sh"
                 }
-            }
-        stages{
-            
             stage('Testing'){
                 steps{
                     sh "./scripts/test.sh"
