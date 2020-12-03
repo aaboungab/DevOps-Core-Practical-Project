@@ -16,11 +16,6 @@ pipeline{
                     sh "./scripts/build.sh"
                 }
             }
-            stage('Pushing Images'){
-                steps{
-                    sh "./scripts/push.sh"
-                }
-            }
             stage('Deploying App'){
                 steps{
                     sh "./scripts/deploy.sh"
