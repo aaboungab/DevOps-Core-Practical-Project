@@ -1,6 +1,5 @@
 #! /bin/bash
 
-docker-compose down --rmi all
 if (env.rollback == 'false'){
                             image1 = docker.build("aaboungab/service1")
                             image2 = docker.build("aaboungab/service2")
@@ -8,5 +7,3 @@ if (env.rollback == 'false'){
                             image4 = docker.build("aaboungab/service4")
                             imagesql = docker.build("aaboungab/mysql")
                             imagenginx = docker.build("aaboungab/nginx")}
-docker-compose build
-docker-compose push
