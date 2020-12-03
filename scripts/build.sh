@@ -1,6 +1,6 @@
 #! /bin/bash
 
-sudo docker login
-sudo docker-compose down --rmi all
-sudo docker-compose build
-sudo docker-compose push
+docker login
+docker-compose down --rmi all
+docker-compose build
+docker-compose push
