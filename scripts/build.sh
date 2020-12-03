@@ -1,7 +1,12 @@
 #! /bin/bash
 
 docker-compose down --rmi all
+if (env.rollback == 'false'){
+                            image1 = docker.build("aaboungab/service1")
+                            image2 = docker.build("aaboungab/service2")
+                            image3 = docker.build("aaboungab/service3")
+                            image4 = docker.build("aaboungab/service4")
+                            imagesql = docker.build("aaboungab/mysql")
+                            imagenginx = docker.build("aaboungab/nginx")}
 docker-compose build
-docker.withRegistry('https://registry.hub.docker.com', 'DOCKERHUB_CREDENTIALS'){
-    image.push("${env.app_version}")}
 docker-compose push
