@@ -2,15 +2,16 @@ version: '3.7'
 services:
   service1:
     build: ./service1
-    enviroment: 
+    environment: 
       SQLALCHEMY_DATABASE_URI: mysql+pymysql://root:11@mysql:3306/player_db
     image: aaboungab/service1:s1
+    container_name: s1_container
     ports:
     - target: 5000
       published: 5000
       protocol: tcp
   database:
-    image: mysql:latest
+    image: mysql:latest 
     container_name: mysql
     environment:
       MYSQL_DATABASE: player_db
@@ -22,9 +23,14 @@ services:
       - type: volume
         source: mysql
         target: /var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h localhost --password=${PASS} 
+      timeout: 60s
+      retries: 10
   service2:
     build: ./service2
     image: aaboungab/service2:s2
+    container_name: s2_container
     ports:
     - target: 5001
       published: 5001
@@ -32,6 +38,7 @@ services:
   service3:
     build: ./service3
     image: aaboungab/service3:s3
+    container_name: s3_container
     ports:
     - target: 5002
       published: 5002
@@ -39,6 +46,7 @@ services:
   service4:
     build: ./service4
     image: aaboungab/service4:s4
+    container_name: s4_container
     ports:
     - target: 5003
       published: 5003
