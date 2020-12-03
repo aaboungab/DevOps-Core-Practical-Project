@@ -13,7 +13,7 @@ services:
       published: 5000
       protocol: tcp
   database:
-    image: mysql:latest 
+    image: aaboungab/mysql:latest 
     container_name: mysql
     environment:
       MYSQL_DATABASE: player_db
@@ -60,7 +60,7 @@ services:
       published: 5003
       protocol: tcp
   nginx:
-    image: nginx:latest
+    image: aaboungab/nginx:latest
     ports:
     - target: 80
       published: 80
