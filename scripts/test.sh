@@ -1,5 +1,5 @@
 #! /bin/bash
-
+ansible --version
 echo "----------------------------Testing service 1"
 cd service1/
 pip3 install -r requirements.txt
