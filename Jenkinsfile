@@ -6,7 +6,7 @@ pipeline{
         }
         stages{
             stage('Install Docker using ansible'){
-            steps{
+                steps{
                 sh " ./scripts/ansible.sh"
                 	}
             stage('Testing'){
