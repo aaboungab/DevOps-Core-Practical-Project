@@ -1,5 +1,5 @@
 #! /bin/bash
 docker --version
-sudo docker-compose down --rmi all
-sudo docker-compose pull
-sudo docker-compose build
+docker-compose down --rmi all
+docker-compose pull
+docker-compose build
