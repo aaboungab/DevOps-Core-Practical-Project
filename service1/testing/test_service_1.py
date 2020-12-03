@@ -18,4 +18,4 @@ class TestResponse(TestBase):
                     p.return_value.text = "Mesut Ozil"
 
                     response = self.client.get(url_for('index'))
-                    self.assertIn(b'Your player is Mesut Ozil, they play in the Midfield position for Arsenal')
+                    self.assertIn(b'Your player is Mesut Ozil, they play in the Midfield position for Arsenal', response.data)
