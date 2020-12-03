@@ -1,3 +1,2 @@
 #! /bin/bash
-sudo docker-compose down --rmi all
-sudo docker-compose build
+docker --version
