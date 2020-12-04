@@ -2,16 +2,15 @@
 leader
 
 [swarmleader:vars]
-ansible_user=aboun
+ansible_user=jenkins
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-ansible_ssh_private_key_file=/home/aboun/.ssh/ansible_id_rsa
+ansible_ssh_private_key_file=~/.ssh/ansible_id_rsa
 
 
 [workers]
 worker1
-worker2
 
 [workers:vars]
-ansible_user=aboun
+ansible_user=jenkins
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
-ansible_ssh_private_key_file=/home/aboun/.ssh/ansible_id_rsa
+ansible_ssh_private_key_file=~/.ssh/ansible_id_rsa
