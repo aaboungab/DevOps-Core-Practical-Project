@@ -1,5 +1,5 @@
 - name: "Join a Swarm"
-  docker_swarm:
+  community.general.docker_swarm:
     state: join
     remote_addrs: [ "{{ hostvars['leader']['ansible_default_ipv4']['address'] }}:2377" ]
     advertise_addr: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"

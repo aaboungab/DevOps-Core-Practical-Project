@@ -1,8 +1,8 @@
 - name: "Initialise the Swarm"
-  docker_swarm:
+  community.general.docker_swarm:
     state: present
 - name: "Get Swarm info"
-  docker_swarm_info:
+  community.general.docker_swarm_info:
   register: swarm_info
 - debug:
     msg: "Swarm Info: {{ swarm_info }}"

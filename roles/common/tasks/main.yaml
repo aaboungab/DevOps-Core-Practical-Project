@@ -2,8 +2,19 @@
   apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
 
 - name: Install required system packages
-  apt: name={{ item }} state=latest update_cache=yes
-  loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'gnupg2', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
+  apt: 
+    pkg: 
+    - 'apt-transport-https'
+    - 'ca-certificates'
+    - 'curl'
+    - 'gnupg2'
+    - 'software-properties-common'
+    - 'python3-pip'
+    - 'virtualenv'
+    - 'python3-setuptools'
+    - 'python3'
+    
+    update_cache: true
 
 - name: Add Docker GPG apt Key
   apt_key:
@@ -21,11 +32,7 @@
 - name: Install Docker Module for Python
   pip:
     name: docker
-
-- name: Pull default Docker image
-  docker_image:
-    name: ubuntu
-    source: pull
+    executable: pip3
 
 - name: Check current docker-compose version.
   command: docker-compose --version
