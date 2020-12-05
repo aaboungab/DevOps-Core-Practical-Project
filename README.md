@@ -5,9 +5,8 @@
 ### Anas Aboungab
 
 ### Links
-- Trello
-- Risk Assessment
-- Website 
+- [Trello](https://trello.com/b/0Cc9TWJl/practical-qa-project)
+- [Risk Assessment](https://docs.google.com/spreadsheets/d/1FCPe9_ZKv7dBet7Kun1iwqqojjbt0dE1ftpGjEZP5fs/edit#gid=0)
 
 ## Contents
 - [Brief](#brief)
@@ -23,7 +22,7 @@
     - [Service-Orientated architecture](#soa) 
     - [Application Infrastructure](#appinf)
     - [Entity Relationship Diagram](#erd)
-- [Continous Integration pipeline](#ci)
+- [Continuous Integration pipeline](#ci)
     - [CI pipeline - version 1](#ci1)
     - [CI pipeline - version 2](#ci2)
 - [Testing](#test_)
@@ -36,8 +35,8 @@
 - [Successes](#suc)
 - [Future Improvements](#improve)
 
-<a name="breif"></a>
-## Breif
+<a name="brief"></a>
+## Brief
 
 <a name="obj"></a>
 ### Objective
@@ -49,7 +48,6 @@ Use of python modules that we have covered in the previous project (Flask, Jinja
 Use of Jenkins to automate project builds
 - Cloud Fundamentals 
 Use of the cloud rapid elasticity 
-
 
 <a name="reqs"></a>
 ### Requirements 
@@ -66,10 +64,10 @@ The requirements of the project were as follows:
 
 <a name="approach"></a>
 ### Project Approach
-To meet the projects SOA requirements I decided to create an application with 4 services that communicate with eachother to generate a random football player for the user. 
+To meet the projects SOA requirements, I decided to create an application with 4 services that communicate with eachother to generate a random football player for the user. 
 
 #### Service 1
-The core service for the application where data recieved from other services is rendered into a Jinja2 template. Service 1 communicates with service 2, 3, 4 & presists some data in an MySQL database. Service 1 performs a **GET request on services 2, 3** and a **POST request on service 4**. The responses given by service 2, 3 & 4 are then used by service 1 to display back to the user via HTML and Jinja2 templating.
+The core service for the application where data recieved from other services is rendered into a Jinja2 template. Service 1 communicates with service 2, 3, 4 & presists some data in a MySQL database. Service 1 performs a **GET request on services 2, 3** and a **POST request on service 4**. The responses given by service 2, 3 & 4 are then used by service 1 to display back to the user via HTML and Jinja2 templating.
 
 **routes located:  service1/application/routes.py**
 ```bash
@@ -167,7 +165,7 @@ Application that utilises that benefits of micro-service architecture and contai
 
 <a name="cla"></a>
 ### Container level architecture
-Below is diagram was the inital container level architecture of my application:
+Below is the diagram of the inital container level architecture of my application:
 
 <img src="/documentation/CLA-old.png" alt="" width="100%" height="100%"/>
 
@@ -228,11 +226,11 @@ pipeline{
 
 **CI pipeline version 1 - areas of improvement:**
 - configuration of the swarm cluster
-The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could of been automated. 
+The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could have been automated. 
 
 <a name="ci2"></a>
 ### CI pipeline - version 2
-This version of the CI pipeline is an extension of the first but with a major configuration tool being added called Ansible. This made my CI pipeline much more lean and agile, Ansible took care of installing set of dependancies, docker, docker-compose across my cluster and initalising the swarm. First I had to create an Ansible Inventory file to define the hosts and groups in my cluster. I then used the core feature Ansible playbboks that was used to automate the cluster configuration. Playbooks are yaml files that essentially contain a set of tasks for Ansible to complete. Ansible roles was used alongside the playbook to further specificy what needs to installed in each node. 
+This version of the CI pipeline is an extension of the first but with a major configuration tool being added called Ansible. This made my CI pipeline much more lean and agile, Ansible took care of installing set of dependancies, docker, docker-compose across my cluster and initalising the swarm. First, I had to create an Ansible Inventory file to define the hosts and groups in my cluster. I then used the core feature Ansible playbboks that was used to automate the cluster configuration. Playbooks are yaml files that essentially contain a set of tasks for Ansible to complete. Ansible roles was used alongside the playbook to further specificy what needs to installed in each node. 
 
 <img src="/documentation/ci-2.png" alt="" width="100%" height="100%"/>
 
@@ -267,7 +265,7 @@ pipeline{
 }
 ```
 **CI pipeline version 2 - areas of improvement:**
-- Jenkins pipeline stage build notifications
+- Jenkins pipeline stage builds notification
 Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
 
 <img src="/documentation/ci-3.png" alt="" width="100%" height="100%"/>
@@ -294,7 +292,6 @@ class TestResponse(TestBase):
                 self.assertIn(b'Your player is Mesut Ozil, they play in the Arsenal position for Arsenal', response.data)
 ```
 <img src="/documentation/test1.png" alt="" width="100%" height="100%"/>
-
 
 <a name="test_2/3"></a>
 ### Service 2 & 3 tests
@@ -323,7 +320,6 @@ class TestResponse(TestBase):
             self.assertIn(b'Arsenal', response.data)
 ```
 <img src="/documentation/test3.png" alt="" width="100%" height="100%"/>
-
 
 <a name="test_4"></a>
 ### Service 4 test
