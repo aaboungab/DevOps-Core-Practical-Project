@@ -14,25 +14,27 @@
     - [Objective](#obj)
     - [Requirements](#reqs)
     - [Project Approach](#approach)
+        - Service 1
+        - Service 2
+        - Service 3
+        - Service 4
 - [Architecture](#arch)
     - [Container level architecture](#cla)
     - [Service-Orientated architecture](#soa) 
+    - [Application Infrastructure](#appinf)
     - [Entity Relationship Diagram](#erd)
 - [Continous Integration pipeline](#ci)
-- [Project Planning & User Stories](#use_case)
+    - [CI pipeline - version 1](#ci1)
+    - [CI pipeline - version 2](#ci2)
 - [Testing](#test_)
-- [Deployment](#depl)
-- [Technologies used](#tech)
+    - [Service 1 test](#test_1)
+    - [Service 2 & 3 test](#test_2/3)
+    - [Service 4 test](#test_4)
 - [Risk Assessment](#risks)
-    - [Explanation](#risk-exp)
-- [Front end Design](#FE)
+- [Project Planning & Tracking](#use_case)
+- [Technologies used](#tech)
 - [Successes](#suc)
 - [Future Improvements](#improve)
-
-### Prerequisites
-- Git
-- Docker
-- Docker-compose
 
 <a name="breif"></a>
 ## Breif
@@ -165,21 +167,29 @@ Application that utilises that benefits of micro-service architecture and contai
 
 <a name="cla"></a>
 ### Container level architecture
-Below is the container level architecture of my application:
+Below is diagram was the inital container level architecture of my application:
 
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/CLA-old.png" alt="" width="100%" height="100%"/>
+
+I realised that this model will not work as service 2 was producing positions that were not utilised by service 4. Service 4 only used Service 3 data (teams) to return a slogan. Knowing that this model will not pass the breif I change services 4 from providing slogan to providing player names, utilising the data given by service 2 & 3. The updated and final container level architectures was as follows:
+
+<img src="/documentation/CLA.png" alt="" width="100%" height="100%"/>
 
 <a name="soa"></a>
 ### Service-Orientated architecture 
 Below is the service architecture of my application. 
 
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/SOA.png" alt="" width="100%" height="100%"/>
+
+<a name="appinf"></a>
+### Application Infrastructure
+<img src="/documentation/infrastructure.png" alt="" width="100%" height="100%"/>
 
 <a name="erd"></a>
 ### Entity Relationship Diagram
 MySQL database was used to persist the generated data.
 
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/erd.png" alt="" width="100%" height="100%"/>
 
 <a name="ci"></a>
 ## Continous Integration pipeline 
@@ -189,7 +199,7 @@ CI development practice was implemented into my project to integrate my code int
 ### CI pipeline - version 1
 My pipeline initally used jenkins to automate testing, building & deploying my application via the Jenkinsfile. I used Jenkins webhook to trigger project builds when a commit is made into the master branch. At this stage I was using a multi-branch model to seperate my branches to then merge on github to be ready for deployment. 
 
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/ci-1.png" alt="" width="100%" height="100%"/>
 
 The below Jenkinsfile is a three-stage CI pipeline that I used. The test stage step used a script (test.sh) which will test services 1, 2, 3 and 4. The next stage would be building the application, this consisted of building docker images from the Dockerfiles in each service and pushing these images to Dockerhub. The final stage was deploying my application into the swarm cluster which required me to SSH into the leader (swarm-manager), clone down the Github repository, pull the images using the docker-compose.yaml file then deploying my application into the swarm. 
 
@@ -224,7 +234,7 @@ The docker swarm cluster had to be configured manually in this version. My clust
 ### CI pipeline - version 2
 This version of the CI pipeline is an extension of the first but with a major configuration tool being added called Ansible. This made my CI pipeline much more lean and agile, Ansible took care of installing set of dependancies, docker, docker-compose across my cluster and initalising the swarm. First I had to create an Ansible Inventory file to define the hosts and groups in my cluster. I then used the core feature Ansible playbboks that was used to automate the cluster configuration. Playbooks are yaml files that essentially contain a set of tasks for Ansible to complete. Ansible roles was used alongside the playbook to further specificy what needs to installed in each node. 
 
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/ci-2.png" alt="" width="100%" height="100%"/>
 
 My Jenkinsfile changed to add a new step **Ansible Swarm config** after building the docker images to setup swarm but adding the name of the vm into the ansible inventory file. 
 
@@ -259,7 +269,8 @@ pipeline{
 **CI pipeline version 2 - areas of improvement:**
 - Jenkins pipeline stage build notifications
 Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
-- 
+
+<img src="/documentation/ci-3.png" alt="" width="100%" height="100%"/>
 
 <a name="test_"></a>
 ## Testing
@@ -282,7 +293,7 @@ class TestResponse(TestBase):
                 response = self.client.get(url_for('index'))
                 self.assertIn(b'Your player is Mesut Ozil, they play in the Arsenal position for Arsenal', response.data)
 ```
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/test1.png" alt="" width="100%" height="100%"/>
 
 
 <a name="test_2/3"></a>
@@ -299,7 +310,7 @@ class TestResponse(TestBase):
             response = self.client.get(url_for('position'))
             self.assertIn(b'Striker', response.data)
 ```
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/test2.png" alt="" width="100%" height="100%"/>
 
 **Service 3 test**: complete test can be found at [test_service_3.py](https://github.com/aaboungab/W9_-SoloProject/blob/master/service3/testing/test_service_3.py)
 
@@ -311,10 +322,10 @@ class TestResponse(TestBase):
             response = self.client.get(url_for('team'))
             self.assertIn(b'Arsenal', response.data)
 ```
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/test3.png" alt="" width="100%" height="100%"/>
 
 
-<a name="test_1"></a>
+<a name="test_4"></a>
 ### Service 4 test
 Service 4 test also used unittest.mock library similar to service 1 to mock the responses from service 2 and 3. Service 4 also ran unit tests to ensure that the response data is as expected. 
 
@@ -331,22 +342,44 @@ def test_chelsea_st(self):
                         data = 'Striker Chelsea')
                     self.assertIn(b'Olivier Giroud', response.data)
 ```
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+<img src="/documentation/test4.png" alt="" width="100%" height="100%"/>
 
 <a name=risks></a>
 ## Risk Assessment
 I have thought of a number of risks that my project may face and have categorised them below to analyse the risk, its impact, likelihood and the appropriate response to that risk. The risks can be seen as a combination of technical risks associate with the development side of the project and general risks that will directly or indirectly impact the project
 
-[Excel version]()
-<img src="/Documentation/" alt="" width="100%" height="100%"/>
+[Excel version](https://docs.google.com/spreadsheets/d/1FCPe9_ZKv7dBet7Kun1iwqqojjbt0dE1ftpGjEZP5fs/edit#gid=0)
+<img src="/documentation/Risks.png" alt="" width="100%" height="100%"/>
 
 <a name="use_case"></a>
-### Project Planning & User Stories 
+## Project Planning & Tracking
+I used Trello as a planning tool to keep track of tasks and update what needs to be done or has been completed. 
+
+My inital Trello board:
+<img src="/documentation/trello-1.png" alt="" width="100%" height="100%"/>
+
+My final Trello board:
+<img src="/documentation/trello-2.png" alt="" width="100%" height="100%"/>
 
 <a name="tech"></a>
-### Technologies Used
+## Technologies Used
+* Database: GCP SQL Server
+* Programming language: Python
+* Framework: Flask
+* Deployment: Gunicorn
+* CI Server: Jenkins
+* Test Reporting: Pytest, unittest.mock
+* VCS: [Git](https://github.com/aaboungab)
+* Project Tracking: [Trello](https://trello.com/b/0Cc9TWJl/practical-qa-project)
+* Live Environment: GCP
+* Containerization: Docker
+* Configuration Management: Ansible
+* Orchestration: Docker-compose
 
+<a name="suc"></a>
+## Successes
 
-
+<a name="improve"></a>
+## Future Improvements
 
 
