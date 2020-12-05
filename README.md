@@ -15,8 +15,10 @@
     - [Requirements](#reqs)
     - [Project Approach](#approach)
 - [Architecture](#arch)
-    - [Entity Relationship Diagrams](#erd)
-- [CI Pipeline](#ci)
+    - [Container level architecture](#cla)
+    - [Service-Orientated architecture](#soa) 
+    - [Entity Relationship Diagram](#erd)
+- [Continous Integration pipeline](#ci)
 - [Project Planning & User Stories](#use_case)
 - [Testing](#test_)
 - [Deployment](#depl)
@@ -89,7 +91,7 @@ I also added a generate button that can be used by the user to generate a random
 <a href="{{ url_for('index')}}"><button>Generate</button></a>
 ```
 #### Service 2
-Service 2 generates a random player position. There a 3 position variations that can be assigned to the random player
+Service 2 generates a random player position. There a 3 position variations that can be assigned to the random player. This service will send a G
 
 **routes located:  service2/application/routes.py**
 ```bash
@@ -103,6 +105,87 @@ def position():
 ```
 
 #### Service 3
-Service 3 generate a random player team. There are 3 teams that can be assigned to the random player. 
+Service 3 generates a random player team. There are 3 teams that can be assigned to the random player. 
+
+**routes located:  service3/application/routes.py**
+```bash
+@app.route('/team', methods=['GET'])
+def team():
+
+    teams = ["Arsenal", "Chelsea", "Liverpool"]
+
+    team = teams[random.randrange(0,3)]
+    
+    return Response(team, mimetype="text/plain")
+```
 
 #### Service 4
+Service 4 is used to generate a random player depending on service 2 player position and service 3 player team. Service 4 will then return the player name back to service 1 as a POST response to display to the user. 
+
+**routes located:  service4/application/routes.py**
+```bash
+@app.route('/name', methods=['GET','POST'])
+def name():
+
+    info = request.data.decode('utf-8')
+    data = info.split(" ")
+    position = data[0]
+    team = data[1]
+
+    if team == "Arsenal":
+        if position == 'Striker':
+            name = 'Pierre-Emerick Aubameyang'
+        elif position == 'Midfield':
+            name = 'Mesut Ozil'
+        elif position == 'CenterBack':
+            name = 'Gabriel Magalhaes'
+    elif team == "Chelsea":
+        if position == 'Striker':
+            name = 'Olivier Giroud'
+        elif position == 'Midfield':
+            name = 'Mateo Kovacic'
+        elif position == 'CenterBack':
+            name = 'Kurt Zouma'
+    elif team == "Liverpool":
+        if position == 'Striker':
+            name = 'Mohamed Salah'
+        elif position == 'Midfield':
+            name = 'Georginio Wijnaldum'
+        elif position == 'CenterBack':
+            name = 'Virgil van Dijk'
+    else:
+        return "player not found"
+
+    
+    return Response(name, mimetype="text/plain")
+```
+<a name="arch"></a>
+## Architecture
+Application that utilises that benefits of micro-service architecture and containerisation
+
+<a name="cla"></a>
+### Container level architecture
+Below is the container level architecture of my application:
+
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+<a name="soa"></a>
+### Service-Orientated architecture 
+Below is the service architecture of my application. 
+
+<img src="/Documentation/" alt="CI" width="100%" height="100%"/>
+
+<a name="erd"></a>
+### Entity Relationship Diagram
+MySQL database was used to persist the generated data.
+
+<img src="/Documentation/" alt="CI" width="100%" height="100%"/>
+
+<a name="ci"></a>
+## Continous Integration pipeline 
+CI development practice was implemented into my project to integrate my code into a Github. However, my CI pipeline evolved throughout the duration of the project. 
+
+<a name="ci1"></a>
+### Inital CI pipeline
+My pipeline initally used jenkins to automate 3 stages to test, build & deploy my application via the Jenkinsfile. 
+ 
