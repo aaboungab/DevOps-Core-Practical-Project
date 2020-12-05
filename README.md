@@ -191,12 +191,7 @@ My pipeline initally used jenkins to automate testing, building & deploying my a
 
 <img src="/Documentation/" alt="" width="100%" height="100%"/>
 
-The below Jenkinsfile is a three-stage CI pipeline that I used. The test stage step used a script (test.sh) which will test services 1, 2, 3 and 4 using unittest mocking. The next stage would be building the application, this consisted of building docker images from the Dockerfiles in each service and pushing these images to Dockerhub. The final stage was deploying my application into the swarm cluster which required me to SSH into the leader (swarm-manager), clone down the Github repository, pull the images using the docker-compose.yaml file then deploying my application into the swarm. 
-
-**CI pipeline version 1 - areas of improvement:**
-- configuration of the swarm cluster
-The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could of been automated. 
-
+The below Jenkinsfile is a three-stage CI pipeline that I used. The test stage step used a script (test.sh) which will test services 1, 2, 3 and 4. The next stage would be building the application, this consisted of building docker images from the Dockerfiles in each service and pushing these images to Dockerhub. The final stage was deploying my application into the swarm cluster which required me to SSH into the leader (swarm-manager), clone down the Github repository, pull the images using the docker-compose.yaml file then deploying my application into the swarm. 
 
 ```bash
 pipeline{
@@ -220,6 +215,11 @@ pipeline{
         }
 }
 ```
+
+**CI pipeline version 1 - areas of improvement:**
+- configuration of the swarm cluster
+The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could of been automated. 
+
 <a name="ci2"></a>
 ### CI pipeline - version 2
 This version of the CI pipeline is an extension of the first but with a major configuration tool being added called Ansible. This made my CI pipeline much more lean and agile, Ansible took care of installing set of dependancies, docker, docker-compose across my cluster and initalising the swarm. First I had to create an Ansible Inventory file to define the hosts and groups in my cluster. I then used the core feature Ansible playbboks that was used to automate the cluster configuration. Playbooks are yaml files that essentially contain a set of tasks for Ansible to complete. Ansible roles was used alongside the playbook to further specificy what needs to installed in each node. 
@@ -227,10 +227,6 @@ This version of the CI pipeline is an extension of the first but with a major co
 <img src="/Documentation/" alt="" width="100%" height="100%"/>
 
 My Jenkinsfile changed to add a new step **Ansible Swarm config** after building the docker images to setup swarm but adding the name of the vm into the ansible inventory file. 
-
-**CI pipeline version 2 - areas of improvement:**
-- Jenkins pipeline stage build notifications
-Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
 
 ```bash
 pipeline{
@@ -260,4 +256,97 @@ pipeline{
     
 }
 ```
+**CI pipeline version 2 - areas of improvement:**
+- Jenkins pipeline stage build notifications
+Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
+- 
+
+<a name="test_"></a>
+## Testing
+The service in my application were tested using Python libaries Pytest and Unittest.mock.  
+
+<a name="test_1"></a>
+### Service 1 test
+Service 1 was test using unittest.mock library to enable me to mock responses that I would expect from services 2, 3 and 4. The method **patch** was used to change the functionality of the function to return a player name. This is then tested against the return data that would be expected from services 2, 3 and 4
+
+[test_service_1.py](https://github.com/aaboungab/W9_-SoloProject/blob/master/service1/testing/test_service_1.py)
+
+```bash
+class TestResponse(TestBase):
+    def test_page(self):
+        with patch("requests.get") as v:
+            with patch("requests.post") as p:
+                v.return_value.text = "Arsenal"
+                p.return_value.text = "Mesut Ozil"
+
+                response = self.client.get(url_for('index'))
+                self.assertIn(b'Your player is Mesut Ozil, they play in the Arsenal position for Arsenal', response.data)
+```
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+
+<a name="test_2/3"></a>
+### Service 2 & 3 tests
+Services 2 and 3 ran basic pytests to ensure that the output of each service was in the correct format
+
+**Service 2 test**: complete test can be found at [test_service_2.py](https://github.com/aaboungab/W9_-SoloProject/blob/master/service2/testing/test_service_2.py)
+```bash
+class TestResponse(TestBase):
+
+    def test_striker_position(self):
+        with patch('random.randrange') as r:
+            r.return_value = 0
+            response = self.client.get(url_for('position'))
+            self.assertIn(b'Striker', response.data)
+```
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+**Service 3 test**: complete test can be found at [test_service_3.py](https://github.com/aaboungab/W9_-SoloProject/blob/master/service3/testing/test_service_3.py)
+
+```bash
+class TestResponse(TestBase):
+    def test_arsenal_team(self):
+        with patch('random.randrange') as r:
+            r.return_value = 0
+            response = self.client.get(url_for('team'))
+            self.assertIn(b'Arsenal', response.data)
+```
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+
+<a name="test_1"></a>
+### Service 4 test
+Service 4 test also used unittest.mock library similar to service 1 to mock the responses from service 2 and 3. Service 4 also ran unit tests to ensure that the response data is as expected. 
+
+**Service 4 test**: complete test can be found at [test_service_4.py](https://github.com/aaboungab/W9_-SoloProject/blob/master/service4/testing/test_service_4.py)
+
+```bash
+def test_chelsea_st(self):
+        with patch('requests.get') as i:
+            i.return_value.text = 'Chelsea'
+            with patch('random.randrange') as r:
+                    r.return_value = 'Striker'
+                    response = self.client.post(
+                        url_for('name'),
+                        data = 'Striker Chelsea')
+                    self.assertIn(b'Olivier Giroud', response.data)
+```
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+<a name=risks></a>
+## Risk Assessment
+I have thought of a number of risks that my project may face and have categorised them below to analyse the risk, its impact, likelihood and the appropriate response to that risk. The risks can be seen as a combination of technical risks associate with the development side of the project and general risks that will directly or indirectly impact the project
+
+[Excel version]()
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+<a name="use_case"></a>
+### Project Planning & User Stories 
+
+<a name="tech"></a>
+### Technologies Used
+
+
+
+
 
