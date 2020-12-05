@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook -i inventory playbook.yaml
+~/.local/bin/ansible-playbook -i inventory playbook.yaml
