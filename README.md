@@ -1,8 +1,8 @@
-# Week 9 Practical Project
-# Football player generator
+# ⚽ Football player generator ⚽
+## Week 9 Practical Project
 
-# Author
-## Anas Aboungab
+## Author
+### Anas Aboungab
 
 ### Links
 - Trello
@@ -173,19 +173,91 @@ Below is the container level architecture of my application:
 ### Service-Orientated architecture 
 Below is the service architecture of my application. 
 
-<img src="/Documentation/" alt="CI" width="100%" height="100%"/>
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
 
 <a name="erd"></a>
 ### Entity Relationship Diagram
 MySQL database was used to persist the generated data.
 
-<img src="/Documentation/" alt="CI" width="100%" height="100%"/>
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
 
 <a name="ci"></a>
 ## Continous Integration pipeline 
-CI development practice was implemented into my project to integrate my code into a Github. However, my CI pipeline evolved throughout the duration of the project. 
+CI development practice was implemented into my project to integrate my code into a version control system (Github). My CI pipeline evolved throughout the duration of the project and below I will illustrate what changed. 
 
 <a name="ci1"></a>
-### Inital CI pipeline
-My pipeline initally used jenkins to automate 3 stages to test, build & deploy my application via the Jenkinsfile. 
- 
+### CI pipeline - version 1
+My pipeline initally used jenkins to automate testing, building & deploying my application via the Jenkinsfile. I used Jenkins webhook to trigger project builds when a commit is made into the master branch. At this stage I was using a multi-branch model to seperate my branches to then merge on github to be ready for deployment. 
+
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+The below Jenkinsfile is a three-stage CI pipeline that I used. The test stage step used a script (test.sh) which will test services 1, 2, 3 and 4 using unittest mocking. The next stage would be building the application, this consisted of building docker images from the Dockerfiles in each service and pushing these images to Dockerhub. The final stage was deploying my application into the swarm cluster which required me to SSH into the leader (swarm-manager), clone down the Github repository, pull the images using the docker-compose.yaml file then deploying my application into the swarm. 
+
+**CI pipeline version 1 - areas of improvement:**
+- configuration of the swarm cluster
+The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could of been automated. 
+
+
+```bash
+pipeline{
+        agent any
+        stages{
+            stage('Test application'){
+                steps{
+                    sh "./scripts/test.sh"
+                }
+            }
+            stage('Build docker images'){
+                steps{
+                    sh "./scripts/build.sh"
+                }
+            }
+            stage('Deploy Animalapp'){
+                steps{
+                    sh "./scripts/deploy.sh"
+                }
+            }
+        }
+}
+```
+<a name="ci2"></a>
+### CI pipeline - version 2
+This version of the CI pipeline is an extension of the first but with a major configuration tool being added called Ansible. This made my CI pipeline much more lean and agile, Ansible took care of installing set of dependancies, docker, docker-compose across my cluster and initalising the swarm. First I had to create an Ansible Inventory file to define the hosts and groups in my cluster. I then used the core feature Ansible playbboks that was used to automate the cluster configuration. Playbooks are yaml files that essentially contain a set of tasks for Ansible to complete. Ansible roles was used alongside the playbook to further specificy what needs to installed in each node. 
+
+<img src="/Documentation/" alt="" width="100%" height="100%"/>
+
+My Jenkinsfile changed to add a new step **Ansible Swarm config** after building the docker images to setup swarm but adding the name of the vm into the ansible inventory file. 
+
+**CI pipeline version 2 - areas of improvement:**
+- Jenkins pipeline stage build notifications
+Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
+
+```bash
+pipeline{
+        agent any
+        stages{
+            stage('Testing'){
+                steps{
+                    sh "./scripts/test.sh"
+                }
+            }
+            stage('Building Images'){
+                steps{
+                    sh "./scripts/build.sh"
+                }
+            }
+            stage('Ansible Swarm config'){
+                steps{
+                    sh "./scripts/ansible.sh"
+                }
+            }
+            stage('Deploying App'){
+                steps{
+                    sh "./scripts/deploy.sh"
+                }
+            }
+        }
+    
+}
+```
+
