@@ -1,16 +1,6 @@
 pipeline{
         agent any
-        environment {
-            app_version = 'v1'
-            rollback = 'false'
-        }
         stages{
-            
-            stage('Ansible'){
-                steps{
-                    sh "./scripts/ansible.sh"
-                }
-            }
             stage('Testing'){
                 steps{
                     sh "./scripts/test.sh"
@@ -19,6 +9,11 @@ pipeline{
             stage('Building Images'){
                 steps{
                     sh "./scripts/build.sh"
+                }
+            }
+            stage('Ansible'){
+                steps{
+                    sh "./scripts/ansible.sh"
                 }
             }
             stage('Deploying App'){
