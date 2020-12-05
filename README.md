@@ -225,7 +225,8 @@ pipeline{
 ```
 
 **CI pipeline version 1 - areas of improvement:**
-- configuration of the swarm cluster
+- Configuration of the swarm cluster
+
 The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could have been automated. 
 
 <a name="ci2"></a>
@@ -266,6 +267,7 @@ pipeline{
 ```
 **CI pipeline version 2 - areas of improvement:**
 - Jenkins pipeline stage builds notification
+
 Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
 
 <img src="/documentation/ci-3.png" alt="" width="100%" height="100%"/>
