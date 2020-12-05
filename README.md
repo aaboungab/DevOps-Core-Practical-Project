@@ -291,7 +291,7 @@ class TestResponse(TestBase):
                 response = self.client.get(url_for('index'))
                 self.assertIn(b'Your player is Mesut Ozil, they play in the Arsenal position for Arsenal', response.data)
 ```
-<img src="/documentation/test1.png" alt="" width="100%" height="100%"/>
+<img src="/documentation/tests1.png" alt="" width="100%" height="100%"/>
 
 <a name="test_2/3"></a>
 ### Service 2 & 3 tests
@@ -307,7 +307,7 @@ class TestResponse(TestBase):
             response = self.client.get(url_for('position'))
             self.assertIn(b'Striker', response.data)
 ```
-<img src="/documentation/test2.png" alt="" width="100%" height="100%"/>
+<img src="/documentation/tests2.png" alt="" width="100%" height="100%"/>
 
 **Service 3 test**: complete test can be found at [test_service_3.py](https://github.com/aaboungab/W9_-SoloProject/blob/master/service3/testing/test_service_3.py)
 
@@ -319,7 +319,7 @@ class TestResponse(TestBase):
             response = self.client.get(url_for('team'))
             self.assertIn(b'Arsenal', response.data)
 ```
-<img src="/documentation/test3.png" alt="" width="100%" height="100%"/>
+<img src="/documentation/tests3.png" alt="" width="100%" height="100%"/>
 
 <a name="test_4"></a>
 ### Service 4 test
@@ -338,7 +338,7 @@ def test_chelsea_st(self):
                         data = 'Striker Chelsea')
                     self.assertIn(b'Olivier Giroud', response.data)
 ```
-<img src="/documentation/test4.png" alt="" width="100%" height="100%"/>
+<img src="/documentation/tests4.png" alt="" width="100%" height="100%"/>
 
 <a name=risks></a>
 ## Risk Assessment
