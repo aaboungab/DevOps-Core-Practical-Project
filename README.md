@@ -193,11 +193,6 @@ My pipeline initally used jenkins to automate testing, building & deploying my a
 
 The below Jenkinsfile is a three-stage CI pipeline that I used. The test stage step used a script (test.sh) which will test services 1, 2, 3 and 4 using unittest mocking. The next stage would be building the application, this consisted of building docker images from the Dockerfiles in each service and pushing these images to Dockerhub. The final stage was deploying my application into the swarm cluster which required me to SSH into the leader (swarm-manager), clone down the Github repository, pull the images using the docker-compose.yaml file then deploying my application into the swarm. 
 
-**CI pipeline version 1 - areas of improvement:**
-- configuration of the swarm cluster
-The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could of been automated. 
-
-
 ```bash
 pipeline{
         agent any
@@ -220,6 +215,11 @@ pipeline{
         }
 }
 ```
+
+**CI pipeline version 1 - areas of improvement:**
+- configuration of the swarm cluster
+The docker swarm cluster had to be configured manually in this version. My cluster consisted of 2 nodes which I had to SSH into to get the cluster up and running. This was quite inefficient as the configuration steps could of been automated. 
+
 <a name="ci2"></a>
 ### CI pipeline - version 2
 This version of the CI pipeline is an extension of the first but with a major configuration tool being added called Ansible. This made my CI pipeline much more lean and agile, Ansible took care of installing set of dependancies, docker, docker-compose across my cluster and initalising the swarm. First I had to create an Ansible Inventory file to define the hosts and groups in my cluster. I then used the core feature Ansible playbboks that was used to automate the cluster configuration. Playbooks are yaml files that essentially contain a set of tasks for Ansible to complete. Ansible roles was used alongside the playbook to further specificy what needs to installed in each node. 
@@ -227,10 +227,6 @@ This version of the CI pipeline is an extension of the first but with a major co
 <img src="/Documentation/" alt="" width="100%" height="100%"/>
 
 My Jenkinsfile changed to add a new step **Ansible Swarm config** after building the docker images to setup swarm but adding the name of the vm into the ansible inventory file. 
-
-**CI pipeline version 2 - areas of improvement:**
-- Jenkins pipeline stage build notifications
-Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
 
 ```bash
 pipeline{
@@ -260,4 +256,8 @@ pipeline{
     
 }
 ```
+**CI pipeline version 2 - areas of improvement:**
+- Jenkins pipeline stage build notifications
+Jenkins provides useful plugins to send build notifications through email, slack or teams. Since I am working this project soley I did not require build notifications. However, if more individuals were involved in the project this can be a useful tool to add into the pipeline for the future. Allowing all developers/parties involved to keep track of the state of the application. 
+- 
 
