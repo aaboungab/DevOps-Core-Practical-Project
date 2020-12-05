@@ -62,3 +62,47 @@ The requirements of the project were as follows:
 
 <a name="approach"></a>
 ### Project Approach
+To meet the projects SOA requirements I decided to create an application with 4 services that communicate with eachother to generate a random football player for the user. 
+
+#### Service 1
+The core service for the application where data recieved from other services is rendered into a Jinja2 template. Service 1 communicates with service 2, 3, 4 & presists some data in an MySQL database. Service 1 performs a **GET request on services 2, 3** and a **POST request on service 4**. The responses given by service 2, 3 & 4 are then used by service 1 to display back to the user via HTML and Jinja2 templating.
+
+**routes located:  service1/application/routes.py**
+```bash
+@app.route('/', methods=['GET','POST'])
+def index():
+
+    #get position
+    position = requests.get("http://service2:5001/position")
+    #get team name
+    team = requests.get("http://service3:5002/team")
+    #post player
+    info = str(position.text) + " " + str(team.text)
+    name = requests.post("http://service4:5003/name", data=info)
+
+    return render_template('index.html', title='player team', position=position.text, team=team.text, info=info, name=name.text)
+```
+I also added a generate button that can be used by the user to generate a random player
+
+**routes located:  service1/application/templates/index.html**
+```bash
+<a href="{{ url_for('index')}}"><button>Generate</button></a>
+```
+#### Service 2
+Service 2 generates a random player position. There a 3 position variations that can be assigned to the random player
+
+**routes located:  service2/application/routes.py**
+```bash
+@app.route('/position', methods=['GET'])
+def position():
+    
+    positions = ["Striker", "Midfield", "CenterBack"]
+    position = positions[random.randrange(0,3)]
+
+    return Response(position, mimetype="text/plain")
+```
+
+#### Service 3
+Service 3 generate a random player team. There are 3 teams that can be assigned to the random player. 
+
+#### Service 4
