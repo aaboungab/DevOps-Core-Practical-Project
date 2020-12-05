@@ -215,7 +215,7 @@ pipeline{
                     sh "./scripts/build.sh"
                 }
             }
-            stage('Deploy Animalapp'){
+            stage('Deploy application'){
                 steps{
                     sh "./scripts/deploy.sh"
                 }
