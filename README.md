@@ -374,8 +374,22 @@ My final Trello board:
 
 <a name="suc"></a>
 ## Successes
+* Microservice Architecture
+    - Docker/Docker-compose (containerisation)
+    - configuration and Orchestration tools
+* Jenkins
+    - plugins
+    - credentials 
+    - rolling updates
+* Linux
+    - User Administration
+    - Ownership
+    - Sudoers 
+    - SSH
 
 <a name="improve"></a>
 ## Future Improvements
+* Adding an Email server into my Jenkins CI pipeline 
+* Use of Database to show the user the history of generated players and most recent player generated
 
 
