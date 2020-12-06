@@ -1,0 +1,16 @@
+service1/__pycache__
+service1/application/__pycache__
+service1/.coverage
+service1/testing/__pycache__
+service2/__pycache__
+service2/application/__pycache__
+service2/.coverage
+service2/testing/__pycache__
+service3/__pycache__
+service3/application/__pycache__
+service3/.coverage
+service3/testing/__pycache__
+service4/__pycache__
+service4/application/__pycache__
+service4/.coverage
+service4/testing/__pycache__
