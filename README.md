@@ -49,6 +49,8 @@ Use of Jenkins to automate project builds
 - Cloud Fundamentals 
 Use of the cloud rapid elasticity 
 
+The focus of this project was around **microservices** style architecture and how different this model is to a monolithic architectural style, which was the model used in the previous [DevOps core fundamental project](https://github.com/aaboungab/DevOps-Core-Fundamental-Project) for the QA training academy. 
+
 <a name="reqs"></a>
 ### Requirements 
 The requirements of the project were as follows:
@@ -64,10 +66,10 @@ The requirements of the project were as follows:
 
 <a name="approach"></a>
 ### Project Approach
-To meet the projects SOA requirements, I decided to create an application with 4 services that communicate with eachother to generate a random football player for the user. 
+To meet the projects model requirements, I decided to create an application with 4 services that communicate with eachother to generate a random football player for the user. 
 
 #### Service 1
-The core service for the application where data recieved from other services is rendered into a Jinja2 template. Service 1 communicates with service 2, 3, 4 & presists some data in a MySQL database. Service 1 performs a **GET request on services 2, 3** and a **POST request on service 4**. The responses given by service 2, 3 & 4 are then used by service 1 to display back to the user via HTML and Jinja2 templating.
+The core service is to perform a **GET request on services 2, 3** and a **POST request on service 4**. Service 1 communicates with service 2, 3, 4 & presists some data in a MySQL database.The responses given by service 2, 3 & 4 are then used by service 1 to display back to the user via HTML and Jinja2 templating.
 
 **routes located:  service1/application/routes.py**
 ```bash
@@ -79,8 +81,8 @@ def index():
     #get team name
     team = requests.get("http://service3:5002/team")
     #post player
-    info = str(position.text) + " " + str(team.text)
     name = requests.post("http://service4:5003/name", data=info)
+    info = str(position.text) + " " + str(team.text)
 
     return render_template('index.html', title='player team', position=position.text, team=team.text, info=info, name=name.text)
 ```
