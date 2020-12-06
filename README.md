@@ -167,11 +167,7 @@ Application that utilises that benefits of micro-service architecture and contai
 
 <a name="cla"></a>
 ### Container level architecture
-Below is the diagram of the inital container level architecture of my application:
-
-<img src="/documentation/CLA-old.png" alt="" width="100%" height="100%"/>
-
-I realised that this model will not work as service 2 was producing positions that were not utilised by service 4. Service 4 only used Service 3 data (teams) to return a slogan. Knowing that this model will not pass the breif I change services 4 from providing slogan to providing player names, utilising the data given by service 2 & 3. The updated and final container level architectures was as follows:
+Container level architecture was as follows:
 
 <img src="/documentation/CLA.png" alt="" width="100%" height="100%"/>
 
