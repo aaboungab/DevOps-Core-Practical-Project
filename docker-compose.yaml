@@ -73,4 +73,3 @@ services:
     - 'service1'
 volumes:
   mysql:
-    
