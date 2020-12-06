@@ -185,6 +185,8 @@ Below is the service architecture of my application.
 ### Entity Relationship Diagram
 MySQL database was used to persist the generated data.
 
+[CreateTables.sql](https://github.com/aaboungab/W9_-SoloProject/blob/master/CreateTables.sql)
+
 <img src="/documentation/erd.png" alt="" width="100%" height="100%"/>
 
 <a name="ci"></a>
@@ -233,7 +235,7 @@ This version of the CI pipeline is an extension of the first but with a major co
 
 <img src="/documentation/ci-2.png" alt="" width="100%" height="100%"/>
 
-My Jenkinsfile changed to add a new step **Ansible Swarm config** after building the docker images to setup swarm but adding the name of the vm into the ansible inventory file. 
+My Jenkinsfile changed to add a new step **Ansible Swarm config** after building the docker images to setup swarm by adding the name of the vm into the ansible inventory file. 
 
 ```bash
 pipeline{
@@ -263,6 +265,8 @@ pipeline{
     
 }
 ```
+[scripts](https://github.com/aaboungab/W9_-SoloProject/tree/master/scripts)
+
 **CI pipeline version 2 - areas of improvement:**
 - Jenkins pipeline stage builds notification
 
