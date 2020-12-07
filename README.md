@@ -398,5 +398,7 @@ My final Trello board:
 ## Future Improvements
 * Adding an Email server into my Jenkins CI pipeline to send build notifications
 * Use of Database to show the user the history of generated players and most recent player generated
+* Implementing the use of JSON to increase data parsing speed
+* I believe that my attempt at nginx was incorrect as the application when built runs on my docker swarm nodes and not on my jenkins server 
 
 
