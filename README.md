@@ -178,7 +178,7 @@ Container level architecture was as follows:
 ### Service-Orientated architecture 
 Below is the service architecture of my application. 
 
-<img src="/documentation/SOA.png" alt="" width="100%" height="100%"/>
+<img src="/documentation/SOA diagram.png" alt="" width="100%" height="100%"/>
 
 <a name="appinf"></a>
 ### Application Infrastructure
