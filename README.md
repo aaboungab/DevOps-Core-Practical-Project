@@ -13,10 +13,6 @@
     - [Objective](#obj)
     - [Requirements](#reqs)
     - [Project Approach](#approach)
-        - Service 1
-        - Service 2
-        - Service 3
-        - Service 4
 - [Architecture](#arch)
     - [Container level architecture](#cla)
     - [Service-Orientated architecture](#soa) 
@@ -41,12 +37,19 @@
 <a name="obj"></a>
 ### Objective
 The objective of the DevOps Core Practical Project is to create an application that generates **objects** upon a set of predefined rules. 
+
 The project must include the below core concepts which we have covered in training:
+
 - Software Development with Python
+
 Use of python modules that we have covered in the previous project (Flask, Jinja2, pymysql)
+
 - Continuous Integration 
+
 Use of Jenkins to automate project builds
+
 - Cloud Fundamentals 
+
 Use of the cloud rapid elasticity 
 
 The focus of this project was around **microservices** style architecture and how different this model is to a monolithic architectural style, which was the model used in the previous [DevOps core fundamental project](https://github.com/aaboungab/DevOps-Core-Fundamental-Project) for the QA training academy. 
@@ -393,7 +396,7 @@ My final Trello board:
 
 <a name="improve"></a>
 ## Future Improvements
-* Adding an Email server into my Jenkins CI pipeline 
+* Adding an Email server into my Jenkins CI pipeline to send build notifications
 * Use of Database to show the user the history of generated players and most recent player generated
 
 
