@@ -399,6 +399,9 @@ My final Trello board:
 * Use of Database to show the user the history of generated players and most recent player generated
 * Implementing the use of JSON to increase data parsing speed
 * I believe that my attempt at nginx was incorrect as the application when built runs on my docker swarm nodes and not on my jenkins server
+
+<img src="/documentation/nginx.conf.png" alt="" width="100%" height="100%"/>
+
 * Use of Enviornment variables in my project
 
 
